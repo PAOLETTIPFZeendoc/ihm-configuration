@@ -78,10 +78,10 @@ const CollectionsStep: React.FC<CollectionsStepProps> = ({
 }) => {
   const [tabValue, setTabValue] = useState(0);
   const [newCollectionName, setNewCollectionName] = useState("");
-  const [selectedPennylaneConfig, setSelectedPennylaneConfig] = useState("");
+  const [selectedPLConfig, setSelectedPLConfig] = useState("");
   const [selectedCollConfig, setSelectedCollConfig] = useState("");
   const [newCollConfigName, setNewCollConfigName] = useState("");
-  const [newPennylaneConfigName, setNewPennylaneConfigName] = useState("");
+  const [newPLConfigName, setNewPLConfigName] = useState("");
   const [duplicateDialogOpen, setDuplicateDialogOpen] = useState(false);
   const [duplicateSourceName, setDuplicateSourceName] = useState("");
   const [duplicateNewName, setDuplicateNewName] = useState("");
@@ -110,7 +110,7 @@ const CollectionsStep: React.FC<CollectionsStepProps> = ({
     setTabValue(newValue);
   };
 
-  const handleDeletePennylaneConfig = (configName: string) => {
+  const handleDeletePLConfig = (configName: string) => {
     if (
       window.confirm(
         `Voulez-vous vraiment supprimer la configuration "${configName}" ?`
@@ -121,9 +121,9 @@ const CollectionsStep: React.FC<CollectionsStepProps> = ({
       // Simulation d'un délai pour montrer le loader
       setTimeout(() => {
         const newConfig = { ...config };
-        const pennyLaneConfigs = { ...(newConfig["pennylane-config"] || {}) };
-        delete pennyLaneConfigs[configName];
-        newConfig["pennylane-config"] = pennyLaneConfigs;
+        const PLConfigs = { ...(newConfig["PL-config"] || {}) };
+        delete PLConfigs[configName];
+        newConfig["PL-config"] = PLConfigs;
         setConfig(newConfig);
         setProcessing(false);
       }, 300);
@@ -132,36 +132,36 @@ const CollectionsStep: React.FC<CollectionsStepProps> = ({
 
   const handleEditListsClick = (configName: string) => {
     setEditingConfigName(configName);
-    const pennyLaneConfig = config["pennylane-config"]?.[configName];
-    if (pennyLaneConfig) {
+    const PLConfig = config["PL-config"]?.[configName];
+    if (PLConfig) {
       setListConfigs({
         suppliers_list: {
-          collection: pennyLaneConfig.suppliers_list[0],
-          custom: pennyLaneConfig.suppliers_list[1],
+          collection: PLConfig.suppliers_list[0],
+          custom: PLConfig.suppliers_list[1],
         },
         journals_list: {
-          collection: pennyLaneConfig.journals_list[0],
-          custom: pennyLaneConfig.journals_list[1],
+          collection: PLConfig.journals_list[0],
+          custom: PLConfig.journals_list[1],
         },
         families_list: {
-          collection: pennyLaneConfig.families_list[0],
-          custom: pennyLaneConfig.families_list[1],
+          collection: PLConfig.families_list[0],
+          custom: PLConfig.families_list[1],
         },
         category_groups_list: {
-          collection: pennyLaneConfig.category_groups_list[0],
-          custom: pennyLaneConfig.category_groups_list[1],
+          collection: PLConfig.category_groups_list[0],
+          custom: PLConfig.category_groups_list[1],
         },
         categories_list: {
-          collection: pennyLaneConfig.categories_list[0],
-          custom: pennyLaneConfig.categories_list[1],
+          collection: PLConfig.categories_list[0],
+          custom: PLConfig.categories_list[1],
         },
         imputationHT_list: {
-          collection: pennyLaneConfig.imputationHT_list[0],
-          custom: pennyLaneConfig.imputationHT_list[1],
+          collection: PLConfig.imputationHT_list[0],
+          custom: PLConfig.imputationHT_list[1],
         },
         imputationTVA_list: {
-          collection: pennyLaneConfig.imputationTVA_list[0],
-          custom: pennyLaneConfig.imputationTVA_list[1],
+          collection: PLConfig.imputationTVA_list[0],
+          custom: PLConfig.imputationTVA_list[1],
         },
       });
     }
@@ -190,8 +190,8 @@ const CollectionsStep: React.FC<CollectionsStepProps> = ({
     // Simulation d'un délai pour montrer le loader
     setTimeout(() => {
       const newConfig = { ...config };
-      const pennyLaneConfigs = { ...(newConfig["pennylane-config"] || {}) };
-      const currentConfig = { ...pennyLaneConfigs[editingConfigName] };
+      const PLConfigs = { ...(newConfig["PL-config"] || {}) };
+      const currentConfig = { ...PLConfigs[editingConfigName] };
 
       // Convertir les ListConfig en tuples [string, string]
       currentConfig.suppliers_list = [
@@ -223,8 +223,8 @@ const CollectionsStep: React.FC<CollectionsStepProps> = ({
         listConfigs.imputationTVA_list.custom,
       ];
 
-      pennyLaneConfigs[editingConfigName] = currentConfig;
-      newConfig["pennylane-config"] = pennyLaneConfigs;
+      PLConfigs[editingConfigName] = currentConfig;
+      newConfig["PL-config"] = PLConfigs;
       setConfig(newConfig);
 
       setEditListsDialogOpen(false);
@@ -234,8 +234,7 @@ const CollectionsStep: React.FC<CollectionsStepProps> = ({
   };
 
   const handleAddCollection = () => {
-    if (!newCollectionName || !selectedPennylaneConfig || !selectedCollConfig)
-      return;
+    if (!newCollectionName || !selectedPLConfig || !selectedCollConfig) return;
 
     setProcessing(true);
 
@@ -245,28 +244,25 @@ const CollectionsStep: React.FC<CollectionsStepProps> = ({
       const collections = { ...(newConfig.collections || {}) };
 
       collections[newCollectionName] = {
-        "pennylane-config": selectedPennylaneConfig,
+        "PL-config": selectedPLConfig,
         coll_config: selectedCollConfig,
       };
 
       newConfig.collections = collections;
       setConfig(newConfig);
 
-      // Mettre à jour la liste des collections dans la configuration PennyLane
-      const pennyLaneConfigs = { ...(newConfig["pennylane-config"] || {}) };
-      const pennyLaneConfig = { ...pennyLaneConfigs[selectedPennylaneConfig] };
-      pennyLaneConfig.colls = [
-        ...(pennyLaneConfig.colls || []),
-        newCollectionName,
-      ];
-      pennyLaneConfigs[selectedPennylaneConfig] = pennyLaneConfig;
-      newConfig["pennylane-config"] = pennyLaneConfigs;
+      // Mettre à jour la liste des collections dans la configuration PL
+      const PLConfigs = { ...(newConfig["PL-config"] || {}) };
+      const PLConfig = { ...PLConfigs[selectedPLConfig] };
+      PLConfig.colls = [...(PLConfig.colls || []), newCollectionName];
+      PLConfigs[selectedPLConfig] = PLConfig;
+      newConfig["PL-config"] = PLConfigs;
 
       setConfig(newConfig);
 
       // Reset form
       setNewCollectionName("");
-      setSelectedPennylaneConfig("");
+      setSelectedPLConfig("");
       setSelectedCollConfig("");
       setProcessing(false);
     }, 300);
@@ -285,30 +281,29 @@ const CollectionsStep: React.FC<CollectionsStepProps> = ({
         const newConfig = { ...config };
         const collections = { ...(newConfig.collections || {}) };
 
-        // Récupérer le nom de la config PennyLane avant de supprimer
-        const pennylaneConfigName =
-          collections[collectionName]?.["pennylane-config"];
+        // Récupérer le nom de la config PL avant de supprimer
+        const PLConfigName = collections[collectionName]?.["PL-config"];
 
         // Supprimer la collection
         delete collections[collectionName];
         newConfig.collections = collections;
 
-        // Supprimer la collection de la liste des collections dans PennyLane
+        // Supprimer la collection de la liste des collections dans PL
         if (
-          pennylaneConfigName &&
-          newConfig["pennylane-config"] &&
-          newConfig["pennylane-config"][pennylaneConfigName]
+          PLConfigName &&
+          newConfig["PL-config"] &&
+          newConfig["PL-config"][PLConfigName]
         ) {
-          const pennyLaneConfigs = { ...(newConfig["pennylane-config"] || {}) };
-          const pennyLaneConfig = { ...pennyLaneConfigs[pennylaneConfigName] };
+          const PLConfigs = { ...(newConfig["PL-config"] || {}) };
+          const PLConfig = { ...PLConfigs[PLConfigName] };
 
-          // S'assurer que pennyLaneConfig.colls existe avant de le filtrer
-          if (pennyLaneConfig.colls) {
-            pennyLaneConfig.colls = pennyLaneConfig.colls.filter(
+          // S'assurer que PLConfig.colls existe avant de le filtrer
+          if (PLConfig.colls) {
+            PLConfig.colls = PLConfig.colls.filter(
               (coll) => coll !== collectionName
             );
-            pennyLaneConfigs[pennylaneConfigName] = pennyLaneConfig;
-            newConfig["pennylane-config"] = pennyLaneConfigs;
+            PLConfigs[PLConfigName] = PLConfig;
+            newConfig["PL-config"] = PLConfigs;
           }
         }
 
@@ -343,16 +338,13 @@ const CollectionsStep: React.FC<CollectionsStepProps> = ({
       collections[duplicateNewName] = { ...collectionConfig };
       newConfig.collections = collections;
 
-      // Ajouter la nouvelle collection à la liste des collections dans PennyLane
-      const pennylaneConfigName = collectionConfig["pennylane-config"];
-      const pennyLaneConfigs = { ...(newConfig["pennylane-config"] || {}) };
-      const pennyLaneConfig = { ...pennyLaneConfigs[pennylaneConfigName] };
-      pennyLaneConfig.colls = [
-        ...(pennyLaneConfig.colls || []),
-        duplicateNewName,
-      ];
-      pennyLaneConfigs[pennylaneConfigName] = pennyLaneConfig;
-      newConfig["pennylane-config"] = pennyLaneConfigs;
+      // Ajouter la nouvelle collection à la liste des collections dans PL
+      const PLConfigName = collectionConfig["PL-config"];
+      const PLConfigs = { ...(newConfig["PL-config"] || {}) };
+      const PLConfig = { ...PLConfigs[PLConfigName] };
+      PLConfig.colls = [...(PLConfig.colls || []), duplicateNewName];
+      PLConfigs[PLConfigName] = PLConfig;
+      newConfig["PL-config"] = PLConfigs;
 
       setConfig(newConfig);
 
@@ -395,17 +387,17 @@ const CollectionsStep: React.FC<CollectionsStepProps> = ({
     }, 300);
   };
 
-  const handleAddPennylaneConfig = () => {
-    if (!newPennylaneConfigName) return;
+  const handleAddPLConfig = () => {
+    if (!newPLConfigName) return;
 
     setProcessing(true);
 
     // Simulation d'un délai pour montrer le loader
     setTimeout(() => {
       const newConfig = { ...config };
-      const pennyLaneConfigs = { ...(newConfig["pennylane-config"] || {}) };
+      const PLConfigs = { ...(newConfig["PL-config"] || {}) };
 
-      pennyLaneConfigs[newPennylaneConfigName] = {
+      PLConfigs[newPLConfigName] = {
         "access-token": "",
         "refresh-token": "",
         "expires-in": "",
@@ -424,20 +416,20 @@ const CollectionsStep: React.FC<CollectionsStepProps> = ({
         "tdf-autoexport-enabled": false,
       };
 
-      newConfig["pennylane-config"] = pennyLaneConfigs;
+      newConfig["PL-config"] = PLConfigs;
       setConfig(newConfig);
-      setNewPennylaneConfigName("");
+      setNewPLConfigName("");
       setProcessing(false);
     }, 300);
   };
 
   const collections = config.collections || {};
-  const pennyLaneConfigs = config["pennylane-config"] || {};
+  const PLConfigs = config["PL-config"] || {};
   const collConfigs = config.coll_config || {};
 
-  const hasPennyLaneConfigs = Object.keys(pennyLaneConfigs).length > 0;
+  const hasPLConfigs = Object.keys(PLConfigs).length > 0;
   const hasCollConfigs = Object.keys(collConfigs).length > 0;
-  const hasConfigurations = hasPennyLaneConfigs && hasCollConfigs;
+  const hasConfigurations = hasPLConfigs && hasCollConfigs;
 
   return (
     <Box>
@@ -477,10 +469,10 @@ const CollectionsStep: React.FC<CollectionsStepProps> = ({
             label={
               <Badge
                 color="secondary"
-                badgeContent={Object.keys(pennyLaneConfigs).length}
+                badgeContent={Object.keys(PLConfigs).length}
                 showZero
               >
-                Configurations PennyLane
+                Configurations PL
               </Badge>
             }
             id="tab-2"
@@ -529,11 +521,9 @@ const CollectionsStep: React.FC<CollectionsStepProps> = ({
           </CardContainer>
 
           <CardContainer
-            title="2. Configurations PennyLane"
-            tooltip="Créez ensuite les configurations PennyLane"
-            subtitle={`${
-              Object.keys(pennyLaneConfigs).length
-            } configurations créées`}
+            title="2. Configurations PL"
+            tooltip="Créez ensuite les configurations PL"
+            subtitle={`${Object.keys(PLConfigs).length} configurations créées`}
           >
             <Button
               variant="outlined"
@@ -621,73 +611,69 @@ const CollectionsStep: React.FC<CollectionsStepProps> = ({
 
       <TabPanel value={tabValue} index={2}>
         <CardContainer
-          title="Configuration PennyLane"
-          tooltip="Créez et gérez les configurations PennyLane"
+          title="Configuration PL"
+          tooltip="Créez et gérez les configurations PL"
         >
           <Box sx={{ display: "flex", gap: 2, mb: 3 }}>
             <TextField
               fullWidth
               label="Nom de la configuration"
-              value={newPennylaneConfigName}
-              onChange={(e) => setNewPennylaneConfigName(e.target.value)}
+              value={newPLConfigName}
+              onChange={(e) => setNewPLConfigName(e.target.value)}
               placeholder="Exemple: deploy1"
             />
             <Button
               variant="contained"
-              onClick={handleAddPennylaneConfig}
-              disabled={!newPennylaneConfigName}
+              onClick={handleAddPLConfig}
+              disabled={!newPLConfigName}
             >
               Ajouter
             </Button>
           </Box>
 
-          {Object.keys(pennyLaneConfigs).length > 0 ? (
+          {Object.keys(PLConfigs).length > 0 ? (
             <List>
-              {Object.entries(pennyLaneConfigs).map(
-                ([name, pennyLaneConfig]) => (
-                  <ListItemWithBadge
-                    key={name}
-                    primary={name}
-                    secondaryItems={[
-                      {
-                        label: "Type",
-                        value: "Configuration PennyLane",
-                        color: "secondary",
-                      },
-                      {
-                        label: "Collections",
-                        value: `${
-                          (pennyLaneConfig.colls || []).length
-                        } associée(s)`,
-                      },
-                    ]}
-                    actions={
-                      <>
-                        <IconButton
-                          edge="end"
-                          aria-label="edit"
-                          onClick={() => handleEditListsClick(name)}
-                          sx={{ mr: 1 }}
-                        >
-                          <EditIcon />
-                        </IconButton>
-                        <IconButton
-                          edge="end"
-                          aria-label="delete"
-                          onClick={() => handleDeletePennylaneConfig(name)}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      </>
-                    }
-                  />
-                )
-              )}
+              {Object.entries(PLConfigs).map(([name, PLConfig]) => (
+                <ListItemWithBadge
+                  key={name}
+                  primary={name}
+                  secondaryItems={[
+                    {
+                      label: "Type",
+                      value: "Configuration PL",
+                      color: "secondary",
+                    },
+                    {
+                      label: "Collections",
+                      value: `${(PLConfig.colls || []).length} associée(s)`,
+                    },
+                  ]}
+                  actions={
+                    <>
+                      <IconButton
+                        edge="end"
+                        aria-label="edit"
+                        onClick={() => handleEditListsClick(name)}
+                        sx={{ mr: 1 }}
+                      >
+                        <EditIcon />
+                      </IconButton>
+                      <IconButton
+                        edge="end"
+                        aria-label="delete"
+                        onClick={() => handleDeletePLConfig(name)}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </>
+                  }
+                />
+              ))}
             </List>
           ) : (
             <Alert severity="info">
-              Aucune configuration PennyLane créée. Ajoutez-en une en utilisant
-              le formulaire ci-dessus.
+              Aucune configuration PL créée. Ajoutez-en une en utilisant le
+              formulaire ci-dessus.
             </Alert>
           )}
         </CardContainer>
@@ -716,13 +702,13 @@ const CollectionsStep: React.FC<CollectionsStepProps> = ({
                   placeholder="Exemple: coll_1"
                 />
                 <FormControl fullWidth>
-                  <InputLabel>Configuration PennyLane</InputLabel>
+                  <InputLabel>Configuration PL</InputLabel>
                   <Select
-                    value={selectedPennylaneConfig}
-                    label="Configuration PennyLane"
-                    onChange={(e) => setSelectedPennylaneConfig(e.target.value)}
+                    value={selectedPLConfig}
+                    label="Configuration PL"
+                    onChange={(e) => setSelectedPLConfig(e.target.value)}
                   >
-                    {Object.keys(pennyLaneConfigs).map((name) => (
+                    {Object.keys(PLConfigs).map((name) => (
                       <MenuItem key={name} value={name}>
                         {name}
                       </MenuItem>
@@ -749,9 +735,7 @@ const CollectionsStep: React.FC<CollectionsStepProps> = ({
                 variant="contained"
                 onClick={handleAddCollection}
                 disabled={
-                  !newCollectionName ||
-                  !selectedPennylaneConfig ||
-                  !selectedCollConfig
+                  !newCollectionName || !selectedPLConfig || !selectedCollConfig
                 }
                 sx={{ mb: 3 }}
               >
@@ -773,8 +757,8 @@ const CollectionsStep: React.FC<CollectionsStepProps> = ({
                         primary={name}
                         secondaryItems={[
                           {
-                            label: "PennyLane",
-                            value: collectionConfig["pennylane-config"],
+                            label: "PL",
+                            value: collectionConfig["PL-config"],
                             color: "secondary",
                           },
                           {
@@ -816,8 +800,7 @@ const CollectionsStep: React.FC<CollectionsStepProps> = ({
           ) : (
             <Alert severity="warning">
               Vous devez d'abord créer au moins une configuration de collection
-              et une configuration PennyLane avant de pouvoir créer des
-              associations.
+              et une configuration PL avant de pouvoir créer des associations.
               <Box sx={{ mt: 2 }}>
                 <Button
                   variant="outlined"
@@ -827,7 +810,7 @@ const CollectionsStep: React.FC<CollectionsStepProps> = ({
                   Créer une configuration de collection
                 </Button>
                 <Button variant="outlined" onClick={() => setTabValue(2)}>
-                  Créer une configuration PennyLane
+                  Créer une configuration PL
                 </Button>
               </Box>
             </Alert>

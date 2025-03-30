@@ -13,6 +13,6 @@ export const dummy_colls = [
   },
   {
     id: "coll_4",
-    name: "coll_4 - _template_pennylane",
+    name: "coll_4 - _template_PL",
   },
 ];

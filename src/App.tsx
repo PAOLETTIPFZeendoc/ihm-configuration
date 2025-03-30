@@ -26,7 +26,7 @@ import NavigateBeforeIcon from "@mui/icons-material/NavigateBefore";
 import { Configuration } from "./types/Config";
 import CollectionsStep from "./components/CollectionsStep";
 import CollConfigStep from "./components/CollConfigStep";
-import PennyLaneConfigStep from "./components/PennyLaneConfigStep";
+import PLConfigStep from "./components/PLConfigStep";
 import theme from "./theme";
 import { initialConfig } from "./components/testData/dummy-json";
 
@@ -40,8 +40,8 @@ const steps = [
     description: "Définir les paramètres des collections",
   },
   {
-    label: "Configuration PennyLane",
-    description: "Configurer les paramètres PennyLane",
+    label: "Configuration PL",
+    description: "Configurer les paramètres PL",
   },
 ];
 
@@ -125,7 +125,7 @@ function App() {
       case 1:
         return <CollConfigStep config={config} setConfig={setConfig} />;
       case 2:
-        return <PennyLaneConfigStep config={config} setConfig={setConfig} />;
+        return <PLConfigStep config={config} setConfig={setConfig} />;
       default:
         return "Étape inconnue";
     }

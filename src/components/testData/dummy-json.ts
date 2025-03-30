@@ -45,7 +45,7 @@ export const initialConfig: Configuration = {
       "attachment-id": "custom_t5",
     },
   },
-  "pennylane-config": {
+  "PL-config": {
     deploy1: {
       "access-token": "",
       "refresh-token": "",
@@ -85,15 +85,15 @@ export const initialConfig: Configuration = {
   },
   collections: {
     coll_1: {
-      "pennylane-config": "deploy1",
+      "PL-config": "deploy1",
       coll_config: "config1",
     },
     coll_2: {
-      "pennylane-config": "deploy2",
+      "PL-config": "deploy2",
       coll_config: "config2",
     },
     coll_3: {
-      "pennylane-config": "deploy1",
+      "PL-config": "deploy1",
       coll_config: "config3",
     },
   },

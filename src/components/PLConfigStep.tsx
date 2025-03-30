@@ -24,16 +24,12 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import LinkIcon from "@mui/icons-material/Link";
-import {
-  Configuration,
-  PennyLaneConfig,
-  CollectionConfig,
-} from "../types/Config";
+import { Configuration, PLConfig, CollectionConfig } from "../types/Config";
 import CardContainer from "./ui/CardContainer";
 import { dummy_customs } from "./testData/dummy_customs";
 import { dummy_colls } from "./testData/dummy_cols";
 
-interface PennyLaneConfigStepProps {
+interface PLConfigStepProps {
   config: Configuration;
   setConfig: (config: Configuration) => void;
 }
@@ -59,17 +55,14 @@ const fieldDescriptions = {
   "tdf-autoexport-enabled": "Activer l'export automatique des TDF",
 };
 
-const PennyLaneConfigStep: React.FC<PennyLaneConfigStepProps> = ({
-  config,
-  setConfig,
-}) => {
+const PLConfigStep: React.FC<PLConfigStepProps> = ({ config, setConfig }) => {
   const [newConfigName, setNewConfigName] = useState("");
   const [expandedConfig, setExpandedConfig] = useState<string | false>(false);
 
   const handleAddConfig = () => {
     if (!newConfigName) return;
 
-    const newConfig: PennyLaneConfig = {
+    const newConfig: PLConfig = {
       "access-token": "",
       "refresh-token": "",
       "expires-in": "",
@@ -90,9 +83,8 @@ const PennyLaneConfigStep: React.FC<PennyLaneConfigStepProps> = ({
 
     setConfig({
       ...config,
-      "pennylane-config": {
-        ...((config["pennylane-config"] as Record<string, PennyLaneConfig>) ||
-          {}),
+      "PL-config": {
+        ...((config["PL-config"] as Record<string, PLConfig>) || {}),
         [newConfigName]: newConfig,
       },
     });
@@ -107,18 +99,15 @@ const PennyLaneConfigStep: React.FC<PennyLaneConfigStepProps> = ({
       )
     ) {
       const newConfig = { ...config };
-      const pennyLaneConfig = {
-        ...((newConfig["pennylane-config"] as Record<
-          string,
-          PennyLaneConfig
-        >) || {}),
+      const PLConfig = {
+        ...((newConfig["PL-config"] as Record<string, PLConfig>) || {}),
       };
 
       // Supprimer toutes les associations avec cette configuration
       if (newConfig.collections) {
         Object.entries(newConfig.collections).forEach(
           ([collName, collConfig]: [string, CollectionConfig]) => {
-            if (collConfig["pennylane-config"] === configName) {
+            if (collConfig["PL-config"] === configName) {
               const newCollections = { ...newConfig.collections };
               delete newCollections[collName];
               newConfig.collections = newCollections;
@@ -127,61 +116,58 @@ const PennyLaneConfigStep: React.FC<PennyLaneConfigStepProps> = ({
         );
       }
 
-      delete pennyLaneConfig[configName];
-      newConfig["pennylane-config"] = pennyLaneConfig;
+      delete PLConfig[configName];
+      newConfig["PL-config"] = PLConfig;
       setConfig(newConfig);
     }
   };
 
   const handleConfigChange = (
     configName: string,
-    field: keyof PennyLaneConfig,
+    field: keyof PLConfig,
     value: any
   ) => {
     const newConfig = { ...config };
-    const pennyLaneConfig = {
-      ...((newConfig["pennylane-config"] as Record<string, PennyLaneConfig>) ||
-        {}),
+    const PLConfig = {
+      ...((newConfig["PL-config"] as Record<string, PLConfig>) || {}),
     };
-    pennyLaneConfig[configName] = {
-      ...pennyLaneConfig[configName],
+    PLConfig[configName] = {
+      ...PLConfig[configName],
       [field]: value,
     };
-    newConfig["pennylane-config"] = pennyLaneConfig;
+    newConfig["PL-config"] = PLConfig;
     setConfig(newConfig);
   };
 
   const handleArrayChange = (
     configName: string,
-    field: keyof PennyLaneConfig,
+    field: keyof PLConfig,
     index: number,
     value: string
   ) => {
     const newConfig = { ...config };
-    const pennyLaneConfig = {
-      ...((newConfig["pennylane-config"] as Record<string, PennyLaneConfig>) ||
-        {}),
+    const PLConfig = {
+      ...((newConfig["PL-config"] as Record<string, PLConfig>) || {}),
     };
-    const array = [...(pennyLaneConfig[configName][field] as string[])];
+    const array = [...(PLConfig[configName][field] as string[])];
     array[index] = value;
-    pennyLaneConfig[configName] = {
-      ...pennyLaneConfig[configName],
+    PLConfig[configName] = {
+      ...PLConfig[configName],
       [field]: array,
     };
-    newConfig["pennylane-config"] = pennyLaneConfig;
+    newConfig["PL-config"] = PLConfig;
     setConfig(newConfig);
   };
 
-  const pennyLaneConfigs =
-    (config["pennylane-config"] as Record<string, PennyLaneConfig>) || {};
+  const PLConfigs = (config["PL-config"] as Record<string, PLConfig>) || {};
 
   const availableCustoms = dummy_customs;
 
   return (
     <Box>
       <CardContainer
-        title="Ajouter une nouvelle configuration PennyLane"
-        tooltip="Créez une nouvelle configuration PennyLane en lui donnant un nom"
+        title="Ajouter une nouvelle configuration PL"
+        tooltip="Créez une nouvelle configuration PL en lui donnant un nom"
       >
         <Box sx={{ display: "flex", gap: 2 }}>
           <TextField
@@ -202,11 +188,11 @@ const PennyLaneConfigStep: React.FC<PennyLaneConfigStepProps> = ({
       </CardContainer>
 
       <CardContainer
-        title="Configurations PennyLane existantes"
-        tooltip="Configurez les paramètres des configurations PennyLane"
+        title="Configurations PL existantes"
+        tooltip="Configurez les paramètres des configurations PL"
       >
-        {Object.keys(pennyLaneConfigs).length > 0 ? (
-          Object.entries(pennyLaneConfigs).map(([name, configData]) => (
+        {Object.keys(PLConfigs).length > 0 ? (
+          Object.entries(PLConfigs).map(([name, configData]) => (
             <Accordion
               key={name}
               expanded={expandedConfig === name}
@@ -295,11 +281,11 @@ const PennyLaneConfigStep: React.FC<PennyLaneConfigStepProps> = ({
                           <TextField
                             fullWidth
                             label={field}
-                            value={configData[field as keyof PennyLaneConfig]}
+                            value={configData[field as keyof PLConfig]}
                             onChange={(e) =>
                               handleConfigChange(
                                 name,
-                                field as keyof PennyLaneConfig,
+                                field as keyof PLConfig,
                                 e.target.value
                               )
                             }
@@ -343,9 +329,10 @@ const PennyLaneConfigStep: React.FC<PennyLaneConfigStepProps> = ({
                         "imputationHT_list",
                         "imputationTVA_list",
                       ].map((field) => {
-                        const value = configData[
-                          field as keyof PennyLaneConfig
-                        ] as [string, string];
+                        const value = configData[field as keyof PLConfig] as [
+                          string,
+                          string
+                        ];
                         return (
                           <Box key={field}>
                             <Box
@@ -397,7 +384,7 @@ const PennyLaneConfigStep: React.FC<PennyLaneConfigStepProps> = ({
                                   onChange={(e) =>
                                     handleArrayChange(
                                       name,
-                                      field as keyof PennyLaneConfig,
+                                      field as keyof PLConfig,
                                       0,
                                       e.target.value
                                     )
@@ -419,7 +406,7 @@ const PennyLaneConfigStep: React.FC<PennyLaneConfigStepProps> = ({
                                   onChange={(e) =>
                                     handleArrayChange(
                                       name,
-                                      field as keyof PennyLaneConfig,
+                                      field as keyof PLConfig,
                                       1,
                                       e.target.value
                                     )
@@ -470,11 +457,11 @@ const PennyLaneConfigStep: React.FC<PennyLaneConfigStepProps> = ({
                             <TextField
                               fullWidth
                               label={field}
-                              value={configData[field as keyof PennyLaneConfig]}
+                              value={configData[field as keyof PLConfig]}
                               onChange={(e) =>
                                 handleConfigChange(
                                   name,
-                                  field as keyof PennyLaneConfig,
+                                  field as keyof PLConfig,
                                   e.target.value
                                 )
                               }
@@ -520,7 +507,7 @@ const PennyLaneConfigStep: React.FC<PennyLaneConfigStepProps> = ({
           ))
         ) : (
           <Alert severity="info">
-            Aucune configuration PennyLane existante. Ajoutez-en une à l'aide du
+            Aucune configuration PL existante. Ajoutez-en une à l'aide du
             formulaire ci-dessus.
           </Alert>
         )}
@@ -529,4 +516,4 @@ const PennyLaneConfigStep: React.FC<PennyLaneConfigStepProps> = ({
   );
 };
 
-export default PennyLaneConfigStep;
+export default PLConfigStep;

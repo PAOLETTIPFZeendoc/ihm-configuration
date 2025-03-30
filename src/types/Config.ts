@@ -13,7 +13,7 @@ export interface CollConfig {
   "attachment-id": string;
 }
 
-export interface PennyLaneConfig {
+export interface PLConfig {
   "access-token": string;
   "refresh-token": string;
   "expires-in": string;
@@ -33,7 +33,7 @@ export interface PennyLaneConfig {
 }
 
 export interface CollectionConfig {
-  "pennylane-config": string;
+  "PL-config": string;
   coll_config: string;
 }
 
@@ -44,7 +44,7 @@ export interface Configuration {
   coll_config?: {
     [key: string]: CollConfig;
   };
-  "pennylane-config"?: {
-    [key: string]: PennyLaneConfig;
+  "PL-config"?: {
+    [key: string]: PLConfig;
   };
 }
