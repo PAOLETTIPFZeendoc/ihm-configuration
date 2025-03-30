@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/ihm-configuration/static/css/main.9642790e.css",
+    "main.js": "/ihm-configuration/static/js/main.2801b496.js",
+    "index.html": "/ihm-configuration/index.html",
+    "main.9642790e.css.map": "/ihm-configuration/static/css/main.9642790e.css.map",
+    "main.2801b496.js.map": "/ihm-configuration/static/js/main.2801b496.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.9642790e.css",
+    "static/js/main.2801b496.js"
+  ]
+}
