@@ -37,6 +37,8 @@ import LinkIcon from "@mui/icons-material/Link";
 import { Configuration } from "../types/Config";
 import CardContainer from "./ui/CardContainer";
 import ListItemWithBadge from "./ui/ListItemWithBadge";
+import { dummy_colls } from "./testData/dummy_cols";
+import { dummy_customs } from "./testData/dummy_customs";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -287,18 +289,27 @@ const CollectionsStep: React.FC<CollectionsStepProps> = ({
         const pennylaneConfigName =
           collections[collectionName]?.["pennylane-config"];
 
+        // Supprimer la collection
         delete collections[collectionName];
         newConfig.collections = collections;
 
         // Supprimer la collection de la liste des collections dans PennyLane
-        if (pennylaneConfigName) {
+        if (
+          pennylaneConfigName &&
+          newConfig["pennylane-config"] &&
+          newConfig["pennylane-config"][pennylaneConfigName]
+        ) {
           const pennyLaneConfigs = { ...(newConfig["pennylane-config"] || {}) };
           const pennyLaneConfig = { ...pennyLaneConfigs[pennylaneConfigName] };
-          pennyLaneConfig.colls = (pennyLaneConfig.colls || []).filter(
-            (coll) => coll !== collectionName
-          );
-          pennyLaneConfigs[pennylaneConfigName] = pennyLaneConfig;
-          newConfig["pennylane-config"] = pennyLaneConfigs;
+
+          // S'assurer que pennyLaneConfig.colls existe avant de le filtrer
+          if (pennyLaneConfig.colls) {
+            pennyLaneConfig.colls = pennyLaneConfig.colls.filter(
+              (coll) => coll !== collectionName
+            );
+            pennyLaneConfigs[pennylaneConfigName] = pennyLaneConfig;
+            newConfig["pennylane-config"] = pennyLaneConfigs;
+          }
         }
 
         setConfig(newConfig);
@@ -897,14 +908,11 @@ const CollectionsStep: React.FC<CollectionsStepProps> = ({
                       }
                     >
                       <MenuItem value="">Aucun</MenuItem>
-                      <MenuItem value="coll_1">Classeur 1</MenuItem>
-                      <MenuItem value="coll_2">Classeur 2</MenuItem>
-                      <MenuItem value="coll_3">Classeur 3</MenuItem>
-                      <MenuItem value="coll_4">Classeur 4</MenuItem>
-                      <MenuItem value="coll_5">Classeur 5</MenuItem>
-                      <MenuItem value="coll_6">Classeur 6</MenuItem>
-                      <MenuItem value="coll_7">Classeur 7</MenuItem>
-                      <MenuItem value="coll_8">Classeur 8</MenuItem>
+                      {dummy_colls.map((coll) => (
+                        <MenuItem key={coll.id} value={coll.id}>
+                          {coll.name}
+                        </MenuItem>
+                      ))}
                     </Select>
                   </FormControl>
                   <FormControl fullWidth>
@@ -921,14 +929,11 @@ const CollectionsStep: React.FC<CollectionsStepProps> = ({
                       }
                     >
                       <MenuItem value="">Aucun</MenuItem>
-                      <MenuItem value="custom_n1">Custom N1</MenuItem>
-                      <MenuItem value="custom_n2">Custom N2</MenuItem>
-                      <MenuItem value="custom_n3">Custom N3</MenuItem>
-                      <MenuItem value="custom_n4">Custom N4</MenuItem>
-                      <MenuItem value="custom_n5">Custom N5</MenuItem>
-                      <MenuItem value="custom_n6">Custom N6</MenuItem>
-                      <MenuItem value="custom_n7">Custom N7</MenuItem>
-                      <MenuItem value="custom_n8">Custom N8</MenuItem>
+                      {dummy_customs.map((custom) => (
+                        <MenuItem key={custom} value={custom}>
+                          {custom}
+                        </MenuItem>
+                      ))}
                     </Select>
                   </FormControl>
                 </Box>

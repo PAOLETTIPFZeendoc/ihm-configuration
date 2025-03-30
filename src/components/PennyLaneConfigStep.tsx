@@ -30,6 +30,8 @@ import {
   CollectionConfig,
 } from "../types/Config";
 import CardContainer from "./ui/CardContainer";
+import { dummy_customs } from "./testData/dummy_customs";
+import { dummy_colls } from "./testData/dummy_cols";
 
 interface PennyLaneConfigStepProps {
   config: Configuration;
@@ -173,11 +175,7 @@ const PennyLaneConfigStep: React.FC<PennyLaneConfigStepProps> = ({
   const pennyLaneConfigs =
     (config["pennylane-config"] as Record<string, PennyLaneConfig>) || {};
 
-  const availableCustoms = [
-    ...Array.from({ length: 8 }, (_, i) => `custom_n${i + 1}`),
-    ...Array.from({ length: 10 }, (_, i) => `custom_t${i + 1}`),
-    ...Array.from({ length: 3 }, (_, i) => `custom_d${i + 1}`),
-  ];
+  const availableCustoms = dummy_customs;
 
   return (
     <Box>
@@ -406,14 +404,11 @@ const PennyLaneConfigStep: React.FC<PennyLaneConfigStepProps> = ({
                                   }
                                 >
                                   <MenuItem value="">Aucun</MenuItem>
-                                  <MenuItem value="coll_1">Classeur 1</MenuItem>
-                                  <MenuItem value="coll_2">Classeur 2</MenuItem>
-                                  <MenuItem value="coll_3">Classeur 3</MenuItem>
-                                  <MenuItem value="coll_4">Classeur 4</MenuItem>
-                                  <MenuItem value="coll_5">Classeur 5</MenuItem>
-                                  <MenuItem value="coll_6">Classeur 6</MenuItem>
-                                  <MenuItem value="coll_7">Classeur 7</MenuItem>
-                                  <MenuItem value="coll_8">Classeur 8</MenuItem>
+                                  {dummy_colls.map((coll) => (
+                                    <MenuItem key={coll.id} value={coll.id}>
+                                      {coll.name}
+                                    </MenuItem>
+                                  ))}
                                 </Select>
                               </FormControl>
                               <FormControl fullWidth>

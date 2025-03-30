@@ -134,16 +134,40 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <AppBar position="static" elevation={0}>
-        <Toolbar>
-          <SettingsIcon sx={{ mr: 2 }} />
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+      <AppBar
+        position="static"
+        elevation={0}
+        sx={{
+          bgcolor: "primary.main",
+          boxShadow:
+            "0px 1px 3px rgba(0,0,0,0.1), 0px 1px 2px rgba(0,0,0,0.06)",
+        }}
+      >
+        <Toolbar sx={{ height: 64 }}>
+          <SettingsIcon sx={{ mr: 2, color: "#fff" }} />
+          <Typography
+            variant="h6"
+            component="div"
+            sx={{
+              flexGrow: 1,
+              fontWeight: 600,
+              color: "#fff",
+            }}
+          >
             Générateur de Configuration
           </Typography>
           <Button
             color="inherit"
             onClick={handleLoadDummyData}
             startIcon={<CloudDownloadIcon />}
+            sx={{
+              bgcolor: "rgba(255, 255, 255, 0.1)",
+              borderRadius: 2,
+              "&:hover": {
+                bgcolor: "rgba(255, 255, 255, 0.2)",
+                boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
+              },
+            }}
           >
             Charger exemple
           </Button>
@@ -151,11 +175,31 @@ function App() {
       </AppBar>
       <Container maxWidth="lg">
         <Box sx={{ width: "100%", mt: 4 }}>
-          <Paper sx={{ p: 4, borderRadius: 2 }}>
-            <Typography variant="h4" gutterBottom>
+          <Paper
+            sx={{
+              p: { xs: 2, sm: 4 },
+              borderRadius: 3,
+              boxShadow:
+                "0px 1px 3px rgba(0,0,0,0.1), 0px 1px 2px rgba(0,0,0,0.06)",
+            }}
+          >
+            <Typography
+              variant="h4"
+              gutterBottom
+              sx={{
+                fontSize: { xs: "1.75rem", sm: "2rem" },
+                fontWeight: 700,
+                color: "text.primary",
+              }}
+            >
               Générateur de Configuration
             </Typography>
-            <Typography variant="body1" color="text.secondary" paragraph>
+            <Typography
+              variant="body1"
+              color="text.secondary"
+              paragraph
+              sx={{ fontSize: "1rem", mb: 3 }}
+            >
               Suivez les étapes pour générer facilement un fichier de
               configuration complet.
             </Typography>
@@ -164,14 +208,42 @@ function App() {
               activeStep={activeStep}
               alternativeLabel
               nonLinear
-              sx={{ mb: 5 }}
+              sx={{
+                mb: 5,
+                "& .MuiStepConnector-line": {
+                  borderColor: "divider",
+                },
+                "& .MuiStepIcon-root": {
+                  color: "rgba(0, 163, 224, 0.2)",
+                  "&.Mui-active": {
+                    color: "primary.main",
+                  },
+                  "&.Mui-completed": {
+                    color: "primary.main",
+                  },
+                },
+              }}
             >
               {steps.map((step, index) => (
                 <Step key={step.label}>
                   <StepButton onClick={() => handleStep(index)}>
                     <StepLabel>
-                      <Typography variant="subtitle2">{step.label}</Typography>
-                      <Typography variant="caption" color="text.secondary">
+                      <Typography
+                        variant="subtitle2"
+                        sx={{
+                          fontWeight: activeStep === index ? 600 : 500,
+                        }}
+                      >
+                        {step.label}
+                      </Typography>
+                      <Typography
+                        variant="caption"
+                        color="text.secondary"
+                        sx={{
+                          display: "block",
+                          mt: 0.5,
+                        }}
+                      >
                         {step.description}
                       </Typography>
                     </StepLabel>
@@ -183,18 +255,24 @@ function App() {
             <Box
               sx={{
                 mt: 2,
-                p: 1,
+                p: 2,
                 borderLeft: "4px solid",
                 borderColor: "primary.main",
-                bgcolor: "primary.50",
+                bgcolor: "rgba(0, 163, 224, 0.08)",
                 mb: 4,
-                borderRadius: "0 4px 4px 0",
+                borderRadius: "0 8px 8px 0",
               }}
             >
-              <Typography variant="subtitle1" sx={{ fontWeight: "medium" }}>
+              <Typography
+                variant="subtitle1"
+                sx={{
+                  fontWeight: 600,
+                  color: "primary.dark",
+                }}
+              >
                 {steps[activeStep].label}
               </Typography>
-              <Typography variant="body2">
+              <Typography variant="body2" sx={{ color: "text.secondary" }}>
                 {steps[activeStep].description}
               </Typography>
             </Box>
@@ -215,6 +293,15 @@ function App() {
                 variant="outlined"
                 onClick={handleReset}
                 startIcon={<RestartAltIcon />}
+                color="error"
+                sx={{
+                  borderColor: "error.light",
+                  color: "error.main",
+                  "&:hover": {
+                    bgcolor: "rgba(239, 68, 68, 0.04)",
+                    borderColor: "error.main",
+                  },
+                }}
               >
                 Réinitialiser
               </Button>
@@ -223,7 +310,12 @@ function App() {
                 <Button
                   disabled={activeStep === 0}
                   onClick={handleBack}
-                  sx={{ mr: 1 }}
+                  sx={{
+                    mr: 1,
+                    "&.Mui-disabled": {
+                      opacity: 0.4,
+                    },
+                  }}
                   startIcon={<NavigateBeforeIcon />}
                 >
                   Retour
@@ -234,6 +326,13 @@ function App() {
                     variant="contained"
                     onClick={handleNext}
                     endIcon={<NavigateNextIcon />}
+                    sx={{
+                      bgcolor: "primary.main",
+                      "&:hover": {
+                        bgcolor: "primary.dark",
+                        boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
+                      },
+                    }}
                   >
                     Suivant
                   </Button>
@@ -243,6 +342,13 @@ function App() {
                     color="secondary"
                     onClick={handleExport}
                     startIcon={<CloudDownloadIcon />}
+                    sx={{
+                      bgcolor: "secondary.main",
+                      "&:hover": {
+                        bgcolor: "secondary.dark",
+                        boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
+                      },
+                    }}
                   >
                     Exporter JSON
                   </Button>
@@ -255,11 +361,21 @@ function App() {
 
       <Snackbar
         open={snackbar.open}
-        autoHideDuration={4000}
+        autoHideDuration={6000}
         onClose={handleCloseSnackbar}
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
       >
-        <Alert severity={snackbar.severity} onClose={handleCloseSnackbar}>
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={snackbar.severity}
+          variant="filled"
+          sx={{
+            width: "100%",
+            borderRadius: 2,
+            boxShadow:
+              "0px 4px 6px -1px rgba(0,0,0,0.1), 0px 2px 4px -1px rgba(0,0,0,0.06)",
+          }}
+        >
           {snackbar.message}
         </Alert>
       </Snackbar>

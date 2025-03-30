@@ -21,6 +21,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import { Configuration, CollConfig } from "../types/Config";
 import CardContainer from "./ui/CardContainer";
+import { dummy_customs } from "./testData/dummy_customs";
 
 interface CollConfigStepProps {
   config: Configuration;
@@ -28,38 +29,7 @@ interface CollConfigStepProps {
 }
 
 // Liste des customs disponibles
-const customValues = {
-  numeric: [
-    { value: "", label: "Aucun" },
-    { value: "custom_n1", label: "Custom N1" },
-    { value: "custom_n2", label: "Custom N2" },
-    { value: "custom_n3", label: "Custom N3" },
-    { value: "custom_n4", label: "Custom N4" },
-    { value: "custom_n5", label: "Custom N5" },
-    { value: "custom_n6", label: "Custom N6" },
-    { value: "custom_n7", label: "Custom N7" },
-    { value: "custom_n8", label: "Custom N8" },
-  ],
-  text: [
-    { value: "", label: "Aucun" },
-    { value: "custom_t1", label: "Custom T1" },
-    { value: "custom_t2", label: "Custom T2" },
-    { value: "custom_t3", label: "Custom T3" },
-    { value: "custom_t4", label: "Custom T4" },
-    { value: "custom_t5", label: "Custom T5" },
-    { value: "custom_t6", label: "Custom T6" },
-    { value: "custom_t7", label: "Custom T7" },
-    { value: "custom_t8", label: "Custom T8" },
-    { value: "custom_t9", label: "Custom T9" },
-    { value: "custom_t10", label: "Custom T10" },
-  ],
-  date: [
-    { value: "", label: "Aucun" },
-    { value: "custom_d1", label: "Custom D1" },
-    { value: "custom_d2", label: "Custom D2" },
-    { value: "custom_d3", label: "Custom D3" },
-  ],
-};
+const customValues = dummy_customs;
 
 // Définition des types de champs
 const fieldTypes = {
@@ -244,8 +214,6 @@ const CollConfigStep: React.FC<CollConfigStepProps> = ({
                   {Object.entries(configData).map(([field, value]) => {
                     const fieldType =
                       fieldTypes[field as keyof typeof fieldTypes] || "text";
-                    const customOptions =
-                      customValues[fieldType as keyof typeof customValues];
 
                     return (
                       <Box
@@ -268,9 +236,9 @@ const CollConfigStep: React.FC<CollConfigStepProps> = ({
                               )
                             }
                           >
-                            {customOptions.map((option) => (
-                              <MenuItem key={option.value} value={option.value}>
-                                {option.label}
+                            {customValues.map((option) => (
+                              <MenuItem key={option} value={option}>
+                                {option}
                               </MenuItem>
                             ))}
                           </Select>
