@@ -58,7 +58,7 @@ export const initialConfig: Configuration = {
       categories_list: ["coll_3", "custom_t6"],
       imputationHT_list: ["coll_1", "custom_t8"],
       imputationTVA_list: ["coll_1", "custom_t9"],
-      colls: ["coll_1"],
+      colls: ["coll_1", "coll_3"],
       repertoire: "123456",
       "search-id": "123",
       "customer-email": "test@test.fr",
